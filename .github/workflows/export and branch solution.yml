@@ -25,7 +25,7 @@ on:
        default: solutions/
 env:
 #edit your values here
-  ENVIRONMENT_URL: orgc5bad68d.crm.dynamics.com
+  ENVIRONMENT_URL: https://orgc5bad68d.crm.dynamics.com
   CLIENT_ID: ${{secrets.appID}}
   TENANT_ID: ${{secrets.TENANTID}}
 permissions:
