@@ -1,0 +1,91 @@
+name: Assign group to environment
+run-name: Assign ${{ github.event.inputs.group }} to ${{ github.event.inputs.environment }} environment 
+on:
+  workflow_dispatch:
+    inputs:
+    
+      environment:
+        description: "http endpoint of your Dataverse environment"
+        required: true
+        default: "https://githubactionsbuild.crm.dynamics.com"
+
+      group:
+        description: 'AAD object id of group to assign to target environment.'
+        required: true
+
+      group-name:
+        description: 'Name of group/team that will created in Dataverse.'
+        required: true
+
+      role:
+        description: 'Security role name or id to assign to the group.'
+        required: true
+
+      team-type:
+        description: 'Type of team. [Owner|Access|AadSecurityGroup|AadOfficeGroup]'
+        required: true
+        type: choice
+        options:
+            - Owner
+            - Access
+            - AadSecurityGroup
+            - AadOfficeGroup
+            
+      membership-type:
+        description: 'Team membership type. [MembersAndGuests|Members|Owners|Guests]'
+        required: true
+        type: choice
+        options:
+            - MembersAndGuests
+            - Members
+            - Owners
+            - Guests
+
+      business-unit:
+        description: 'ID of business unit to associate application group with.'
+        required: false
+        
+env:
+#edit your values here
+
+  ENVIRONMENT_URL: ${{ github.event.inputs.environment }}
+  CLIENT_ID: 9e4f94ec-87a5-4828-9622-599468558148
+  TENANT_ID: adee85a2-ec85-4b5c-81bd-570776edbfac
+permissions:
+  contents: write
+jobs:
+    Assign-Group-to-Environment:
+      runs-on: windows-latest
+      env:
+        RUNNER_DEBUG: 1
+      steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+          
+      - name: Install Power Platform Tools
+        uses: microsoft/powerplatform-actions/actions-install@v1
+        
+      - name: who-am-i action
+        uses: microsoft/powerplatform-actions/who-am-i@v1
+        with:
+          environment-url: ${{env.ENVIRONMENT_URL}}
+          app-id: ${{env.CLIENT_ID}}
+          client-secret: ${{ secrets.PowerPlatformSPN }}
+          tenant-id: ${{env.TENANT_ID}}
+         
+      - name: Assign-Group
+        uses: microsoft/powerplatform-actions/assign-group@v1
+        with:
+          app-id: ${{env.CLIENT_ID}}
+          client-secret: ${{ secrets.PowerPlatformSPN }}
+          tenant-id:  ${{env.TENANT_ID}}
+          environment: ${{ github.event.inputs.environment }}
+          group: ${{ github.event.inputs.group }}
+          group-name: ${{ github.event.inputs.group-name }}
+          role: ${{ github.event.inputs.role }}
+          team-type: ${{ github.event.inputs.team-type }}
+          membership-type: ${{ github.event.inputs.membership-type }}
+          business-unit: ${{ github.event.inputs.business-unit }}
+      
+     
