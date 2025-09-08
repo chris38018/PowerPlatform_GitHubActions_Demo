@@ -18,7 +18,7 @@ on:
       solution_source_folder:
         description: "Location of the solution files"
         required: true
-        default: solutions/
+        default: solutions/ALMLab
       solution_outbound_folder:
         description: "solution outbound folder"
         required: true
@@ -26,7 +26,7 @@ on:
 
 env:
 #edit your values here
-  ENVIRONMENT_URL: https://orgc5bad68d.crm.dynamics.com
+  ENVIRONMENT_URL: https://githubactionsbuild.crm.dynamics.com
   CLIENT_ID: ${{secrets.appID}}
   TENANT_ID: ${{secrets.TENANTID}}
 permissions:
@@ -47,7 +47,14 @@ jobs:
           environment-url: ${{env.ENVIRONMENT_URL}}
           user-name: ${{env.USERNAME}}
           password-secret: ${{ secrets.password }}
-        
+
+      - name: pack-solution action
+        uses: microsoft/powerplatform-actions/unpack-solution@v1
+        with:
+          zipfile: ${{ github.event.inputs.solution_source_folder }}/${{ github.event.inputs.solution_name }}_Managed.zip
+          folder: ${{ github.event.inputs.solution_outbound_folder }}
+          packagetype: Managed
+      
       - name: Import solution as managed to build env
         uses: microsoft/powerplatform-actions/import-solution@v1
         with:
@@ -55,7 +62,7 @@ jobs:
           app-id: ${{secrets.appID}}
           client-secret: ${{ secrets.PowerPlatformSPN }}
           tenant-id: ${{secrets.tenantID}}
-          solution-file: ${{ github.event.repository.name}}/${{ github.event.inputs.solution_name }}_managed.zip
+          solution-file: ${{ github.event.inputs.solution_outbound_folder}}/${{ github.event.inputs.solution_name }}_managed.zip
           force-overwrite: true
           publish-changes: true
     
