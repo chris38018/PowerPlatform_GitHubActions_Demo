@@ -34,10 +34,10 @@ on:
 
 env:
 #edit your values here
-  BUILD_ENVIRONMENT_URL: ${{ variable.buildenvurl }}
-  PRODUCTION_ENVIRONMENT_URL: ${{ variable.prodenvurl }}
-  CLIENT_ID: ${{secret.appID}}
-  TENANT_ID: ${{secret.tenantID}}
+  BUILD_ENVIRONMENT_URL: ${{ variables.buildenvurl }}
+  PRODUCTION_ENVIRONMENT_URL: ${{ variables.prodenvurl }}
+  CLIENT_ID: ${{secrets.appID}}
+  TENANT_ID: ${{secrets.tenantID}}
 
 permissions:
   contents: write
