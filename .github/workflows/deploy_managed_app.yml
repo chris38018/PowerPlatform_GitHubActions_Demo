@@ -23,12 +23,12 @@ on:
         description: "solution outbound folder"
         required: true
         default: out/stage
-
 env:
 #edit your values here
-  ENVIRONMENT_URL: https://githubactionsbuild.crm.dynamics.com
-  CLIENT_ID: ${{secrets.appID}}
-  TENANT_ID: ${{secrets.TENANTID}}
+
+  ENVIRONMENT_URL: 'https://githubactionsbuild.crm.dynamics.com'
+  CLIENT_ID: 9e4f94ec-87a5-4828-9622-599468558148
+  TENANT_ID: ${{secrets.TENANTID}
 permissions:
   contents: write
 jobs:
@@ -37,18 +37,25 @@ jobs:
       env:
         RUNNER_DEBUG: 1
       steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
         with:
           lfs: true
-
+          
+      - name: Install Power Platform Tools
+        uses: microsoft/powerplatform-actions/actions-install@v1
+        
       - name: who-am-i action
         uses: microsoft/powerplatform-actions/who-am-i@v1
         with:
           environment-url: ${{env.ENVIRONMENT_URL}}
-          user-name: ${{env.USERNAME}}
-          password-secret: ${{ secrets.password }}
-
+          app-id: ${{env.CLIENT_ID}}
+          client-secret: ${{ secrets.PowerPlatformSPN }}
+          tenant-id: ${{env.TENANT_ID}}
+        
+       - name: pack-solution action
+         
       - name: pack-solution action
+
         uses: microsoft/powerplatform-actions/unpack-solution@v1
         with:
           zipfile: ${{ github.event.inputs.solution_source_folder }}/${{ github.event.inputs.solution_name }}_Managed.zip
@@ -64,5 +71,7 @@ jobs:
           tenant-id: ${{secrets.tenantID}}
           solution-file: ${{ github.event.inputs.solution_outbound_folder}}/${{ github.event.inputs.solution_name }}_managed.zip
           force-overwrite: true
+          publish-changes: true
+    
           publish-changes: true
     
