@@ -55,8 +55,8 @@ jobs:
       - name: pack-solution action
         uses: microsoft/powerplatform-actions/pack-solution@v1
         with:
-          solution-file: ${{ github.event.inputs.solution_source_folder }}/${{ github.event.inputs.solution_name }}_Managed.zip
-          solution-folder: ${{ github.event.inputs.solution_outbound_folder }}
+          solution-file: ${{ github.event.inputs.solution_outbound_folder }}/${{ github.event.inputs.solution_name }}_managed.zip
+          solution-folder: ${{ github.event.inputs.solution_source_folder }}
           solution-type: Managed
       
       - name: Import solution as managed to build env
