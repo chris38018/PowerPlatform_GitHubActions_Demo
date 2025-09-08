@@ -14,7 +14,7 @@ on:
       environment_url:
         description: "http endpoint of your Dataverse environment"
         required: true
-        default: "https:githubactionsbuild.crm.dynamics.com"
+        default: "https://githubactionsbuild.crm.dynamics.com"
       solution_source_folder:
         description: "Location of the solution files"
         required: true
@@ -28,7 +28,7 @@ env:
 
   ENVIRONMENT_URL: 'https://githubactionsbuild.crm.dynamics.com'
   CLIENT_ID: 9e4f94ec-87a5-4828-9622-599468558148
-  TENANT_ID: ${{secrets.TENANTID}
+  TENANT_ID: adee85a2-ec85-4b5c-81bd-570776edbfac
 permissions:
   contents: write
 jobs:
@@ -51,12 +51,9 @@ jobs:
           app-id: ${{env.CLIENT_ID}}
           client-secret: ${{ secrets.PowerPlatformSPN }}
           tenant-id: ${{env.TENANT_ID}}
-        
-       - name: pack-solution action
          
       - name: pack-solution action
-
-        uses: microsoft/powerplatform-actions/unpack-solution@v1
+        uses: microsoft/powerplatform-actions/pack-solution@v1
         with:
           zipfile: ${{ github.event.inputs.solution_source_folder }}/${{ github.event.inputs.solution_name }}_Managed.zip
           folder: ${{ github.event.inputs.solution_outbound_folder }}
@@ -72,6 +69,3 @@ jobs:
           solution-file: ${{ github.event.inputs.solution_outbound_folder}}/${{ github.event.inputs.solution_name }}_managed.zip
           force-overwrite: true
           publish-changes: true
-    
-          publish-changes: true
-    
