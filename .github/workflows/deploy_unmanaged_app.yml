@@ -57,7 +57,7 @@ jobs:
         with:
           solution-file: ${{ github.event.inputs.solution_outbound_folder }}/${{ github.event.inputs.solution_name }}_managed.zip
           solution-folder: ${{ github.event.inputs.solution_source_folder }}
-          solution-type: Managed
+          solution-type: Unmanaged
       
       - name: Import solution as managed to build env
         uses: microsoft/powerplatform-actions/import-solution@v1
