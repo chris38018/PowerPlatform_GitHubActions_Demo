@@ -25,9 +25,10 @@ on:
         default: out/stage
 env:
 #edit your values here
+
   ENVIRONMENT_URL: 'https://githubactionsbuild.crm.dynamics.com'
   CLIENT_ID: 9e4f94ec-87a5-4828-9622-599468558148
-  TENANT_ID: adee85a2-ec85-4b5c-81bd-570776edbfac
+  TENANT_ID: ${{secrets.TENANTID}
 permissions:
   contents: write
 jobs:
@@ -52,6 +53,9 @@ jobs:
           tenant-id: ${{env.TENANT_ID}}
         
        - name: pack-solution action
+         
+      - name: pack-solution action
+
         uses: microsoft/powerplatform-actions/unpack-solution@v1
         with:
           zipfile: ${{ github.event.inputs.solution_source_folder }}/${{ github.event.inputs.solution_name }}_Managed.zip
