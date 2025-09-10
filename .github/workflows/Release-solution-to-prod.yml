@@ -34,10 +34,10 @@ on:
 
 env:
 #edit your values here
-  BUILD_ENVIRONMENT_URL: "https://githubactionsbuild.crm.dynamics.com"
-  PRODUCTION_ENVIRONMENT_URL: "https://githubactionsprod.crm.dynamics.com"
-  CLIENT_ID: 9e4f94ec-87a5-4828-9622-599468558148
-  TENANT_ID: adee85a2-ec85-4b5c-81bd-570776edbfac
+  BUILD_ENVIRONMENT_URL: 
+  PRODUCTION_ENVIRONMENT_URL: 
+  CLIENT_ID: 
+  TENANT_ID: 
 
 permissions:
   contents: write
