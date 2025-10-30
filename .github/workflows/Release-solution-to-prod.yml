@@ -34,11 +34,10 @@ on:
 
 env:
 #edit your values here
-  BUILD_ENVIRONMENT_URL: "githubactionsbuild.crm.dynamics.com"
-  PRODUCTION_ENVIRONMENT_URL: githubactionsprod.crm.dynamics.com
-  CLIENT_ID: 
-  TENANT_ID: 
-
+  BUILD_ENVIRONMENT_URL: "https://githubactionsbuild.crm.dynamics.com"
+  PRODUCTION_ENVIRONMENT_URL: "https://githubactionsprod.crm.dynamics.com"
+  CLIENT_ID: 9e4f94ec-87a5-4828-9622-599468558148
+  TENANT_ID: adee85a2-ec85-4b5c-81bd-570776edbfac
 permissions:
   contents: write
 
@@ -67,21 +66,21 @@ jobs:
     - name: Import solution as unmanaged to build env
       uses: microsoft/powerplatform-actions/import-solution@v1
       with:
-        environment-url: ${{ env.BUILD_ENVIRONMENT_URL }}
-        app-id: ${{ secrets.AppID }} 
-        client-secret: ${{ secrets.PowerPlatformSPN }}
-        tenant-id: ${{ secrets.tenantID}}
-        solution-file: ${{ github.event.inputs.solution_outbound_folder}}/${{ github.event.inputs.solution_name }}.zip
-        force-overwrite: true
-        publish-changes: true
+       environment-url: ${{env.BUILD_ENVIRONMENT_URL}}
+       app-id: ${{ env.CLIENT_ID }}
+       client-secret: ${{ secrets.PowerPlatformSPN }}
+       tenant-id: ${{env.TENANT_ID}}
+       solution-file: ${{ github.event.inputs.solution_outbound_folder}}/${{ github.event.inputs.solution_name }}.zip
+       force-overwrite: true
+       publish-changes: true
 
     - name: Export solution as managed
       uses: microsoft/powerplatform-actions/export-solution@v1
       with:
-        environment-url: ${{ env.BUILD_ENVIRONMENT_URL }}
-        app-id: ${{ secrets.AppID }} 
+        environment-url: ${{env.BUILD_ENVIRONMENT_URL}}
+        app-id: ${{env.CLIENT_ID}}
         client-secret: ${{ secrets.PowerPlatformSPN }}
-        tenant-id: ${{ secrets.tenantID}}
+        tenant-id: ${{env.TENANT_ID}}
         solution-name: ${{ github.event.inputs.solution_name }}
         managed: true
         solution-output-file: ${{ github.event.inputs.solution_shipping_folder}}/${{ github.event.inputs.solution_name }}.zip
@@ -114,10 +113,10 @@ jobs:
     - name: Import solution to prod env
       uses: microsoft/powerplatform-actions/import-solution@v1
       with:
-        environment-url: ${{ env.PRODUCTION_ENVIRONMENT_URL }}
-        app-id: ${{ secrets.AppID }} 
+        environment-url: ${{env.PRODUCTION_ENVIRONMENT_URL}}
+        app-id: ${{env.CLIENT_ID}}
         client-secret: ${{ secrets.PowerPlatformSPN }}
-        tenant-id: ${{ secrets.tenantID}}
+        tenant-id: ${{env.TENANT_ID}}
         solution-file: ${{ github.event.inputs.solution_release_folder}}/${{ github.event.inputs.solution_name }}.zip
         force-overwrite: true
         publish-changes: true
