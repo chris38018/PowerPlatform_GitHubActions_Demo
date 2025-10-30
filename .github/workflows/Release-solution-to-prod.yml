@@ -34,8 +34,8 @@ on:
 
 env:
 #edit your values here
-  BUILD_ENVIRONMENT_URL: 
-  PRODUCTION_ENVIRONMENT_URL: 
+  BUILD_ENVIRONMENT_URL: "githubactionsbuild.crm.dynamics.com"
+  PRODUCTION_ENVIRONMENT_URL: githubactionsprod.crm.dynamics.com
   CLIENT_ID: 
   TENANT_ID: 
 
@@ -67,7 +67,7 @@ jobs:
     - name: Import solution as unmanaged to build env
       uses: microsoft/powerplatform-actions/import-solution@v1
       with:
-        environment-url: ${{vars.buildenvURL}}
+        environment-url: ${{ env.BUILD_ENVIRONMENT_URL }}
         app-id: ${{ secrets.AppID }} 
         client-secret: ${{ secrets.PowerPlatformSPN }}
         tenant-id: ${{ secrets.tenantID}}
@@ -78,7 +78,7 @@ jobs:
     - name: Export solution as managed
       uses: microsoft/powerplatform-actions/export-solution@v1
       with:
-        environment-url: ${{vars.buildenvURL}}
+        environment-url: ${{ env.BUILD_ENVIRONMENT_URL }}
         app-id: ${{ secrets.AppID }} 
         client-secret: ${{ secrets.PowerPlatformSPN }}
         tenant-id: ${{ secrets.tenantID}}
@@ -114,7 +114,7 @@ jobs:
     - name: Import solution to prod env
       uses: microsoft/powerplatform-actions/import-solution@v1
       with:
-        environment-url: ${{vars.PRODENVURL}}
+        environment-url: ${{ env.PRODUCTION_ENVIRONMENT_URL }}
         app-id: ${{ secrets.AppID }} 
         client-secret: ${{ secrets.PowerPlatformSPN }}
         tenant-id: ${{ secrets.tenantID}}
