@@ -1,0 +1,71 @@
+name: Deploy Managed Application
+run-name: Deploying Managed solution ${{ github.event.inputs.solution_name }} for ${{ github.event.inputs.environment_url }} environment
+on:
+  workflow_dispatch:
+    inputs:
+      solution_name:
+        description: "Provide the solution name you want to deploy"
+        required: true
+        default: ALMLab
+      # environment_id:
+      #   description: "GUID of your Dataverse environment"
+      #   required: true
+      #   default: "GUID-OF-YOUR-ENVIRONMENT"
+      environment_url:
+        description: "http endpoint of your Dataverse environment"
+        required: true
+        default: "https://githubactionsbuild.crm.dynamics.com"
+      solution_source_folder:
+        description: "Location of the solution files"
+        required: true
+        default: solutions/ALMLab
+      solution_outbound_folder:
+        description: "solution outbound folder"
+        required: true
+        default: out/stage
+env:
+#edit your values here
+
+  ENVIRONMENT_URL: 'https://githubactionsbuild.crm.dynamics.com'
+  CLIENT_ID: 9e4f94ec-87a5-4828-9622-599468558148
+  TENANT_ID: adee85a2-ec85-4b5c-81bd-570776edbfac
+permissions:
+  contents: write
+jobs:
+    import-managed-solution:
+      runs-on: windows-latest
+      env:
+        RUNNER_DEBUG: 1
+      steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+          
+      - name: Install Power Platform Tools
+        uses: microsoft/powerplatform-actions/actions-install@v1
+        
+      - name: who-am-i action
+        uses: microsoft/powerplatform-actions/who-am-i@v1
+        with:
+          environment-url: ${{env.ENVIRONMENT_URL}}
+          app-id: ${{env.CLIENT_ID}}
+          client-secret: ${{ secrets.PowerPlatformSPN }}
+          tenant-id: ${{env.TENANT_ID}}
+         
+      - name: pack-solution action
+        uses: microsoft/powerplatform-actions/pack-solution@v1
+        with:
+          solution-file: ${{ github.event.inputs.solution_outbound_folder }}/${{ github.event.inputs.solution_name }}_managed.zip
+          solution-folder: ${{ github.event.inputs.solution_source_folder }}
+          solution-type: Managed
+      
+      - name: Import solution as managed to build env
+        uses: microsoft/powerplatform-actions/import-solution@v1
+        with:
+          environment-url: ${{github.event.inputs.environment_url}}
+          app-id: ${{secrets.appID}}
+          client-secret: ${{ secrets.PowerPlatformSPN }}
+          tenant-id: ${{secrets.tenantID}}
+          solution-file: ${{ github.event.inputs.solution_outbound_folder}}/${{ github.event.inputs.solution_name }}_managed.zip
+          force-overwrite: true
+          publish-changes: true
