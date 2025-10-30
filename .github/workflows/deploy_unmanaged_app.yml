@@ -1,4 +1,4 @@
-name: Deploy Managed Application
+name: Deploy Unmanaged Application
 run-name: Deploying Managed solution ${{ github.event.inputs.solution_name }} for ${{ github.event.inputs.environment_url }} environment
 on:
   workflow_dispatch:
